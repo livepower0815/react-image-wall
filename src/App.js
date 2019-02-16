@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+// import Test from './MyComponent';
+
+const lists = ['aaa','bbb','ccc','ddd'];
+
+
 
 class App extends Component {
+  alertHTMLContent(e){
+    console.log(e.target.innerHTML);
+  }
+  
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <h1>Hello World</h1>
+        <ul>
+          {lists.map((result,index)=>{
+            return (<li key={index} onClick={this.alertHTMLContent}>{result}</li>);
+          })}
+        </ul>
       </div>
     );
   }
