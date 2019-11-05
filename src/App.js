@@ -1,25 +1,55 @@
 import React, { Component } from 'react';
 import './App.css';
-// import Test from './MyComponent';
-
-const lists = ['aaa','bbb','ccc','ddd'];
-
-
+import unsplash from '../src/api/unsplash'
+import SearchBar from './MyComponent/SearchBar'
+import ImageList from './MyComponent/ImageList'
+import Pagination from './MyComponent/Pagination'
 
 class App extends Component {
-  alertHTMLContent(e){
-    console.log(e.target.innerHTML);
+  state = {
+    images: [],
+    currentPage: 1,
+    totalPages: 1,
+    searched: false,
+    searchWord: '',
+  };
+
+  searchSubmit = async (term, page) => {
+    const response = await unsplash.get('/search/photos',{
+      params: {
+        query: term || this.state.searchWord,
+        per_page: 30,
+        page: page
+      },
+    })
+    console.log(response.data)
+    this.setState({
+      images: response.data.results,
+      searched: true,
+      searchWord: term == null ? this.state.searchWord : term,
+      currentPage: page,
+      totalPages: response.data.total_pages,
+    })
+
   }
-  
+
   render() {
     return (
-      <div className="App">
-        <h1>Hello World</h1>
-        <ul>
-          {lists.map((result,index)=>{
-            return (<li key={index} onClick={this.alertHTMLContent}>{result}</li>);
-          })}
-        </ul>
+      <div className="ui container" style={{marginTop: '5vh'}}>
+        
+        { /* 搜尋 bar */ } 
+        <SearchBar onSubmit={this.searchSubmit} />
+
+        { /* 上下頁 */ }
+        <Pagination
+          currentPage={this.state.currentPage}
+          totalPages={this.state.totalPages} 
+          searched={this.state.searched} 
+          onChangePage={this.searchSubmit}
+        />
+
+        { /* 圖片牆 */ }
+        <ImageList images={this.state.images} />
       </div>
     );
   }
