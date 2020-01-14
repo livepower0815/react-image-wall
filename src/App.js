@@ -14,6 +14,10 @@ class App extends Component {
     searchWord: '',
   };
 
+  componentDidMount () {
+    this.searchSubmit('girl', 1)
+  }
+
   searchSubmit = async (term, page) => {
     const response = await unsplash.get('/search/photos',{
       params: {
